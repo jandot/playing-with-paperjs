@@ -1,4 +1,4 @@
- var data = [
+var data = [
   {name:"ENGELS Addy",rankings:[164,196,153,195,165,133,125,167,156,130,86,99,106,142,164,157,128,121,138,155]},
   {name:"BAK Lars",rankings:[68,194,141,159,172,126,169,166,169,139,141,4,159,162,148,145,139,139,36,167]},
   {name:"OGRADY Stuart",rankings:[51,38,136,14,157,17,134,83,99,77,92,41,82,33,42,141,61,64,55,47]},
@@ -206,6 +206,17 @@ for (var i = 0; i < 20; i++) {
     path.strokeWidth = 0.25;
 }
 
+function enter(event) {
+    this.strokeColor = 'red';
+    this.opacity = 1;
+    this.strokeWidth = 2;
+}
+function leave(event) {
+    this.strokeColor = 'black';
+    this.opacity = 0.25;
+    this.strokeWidth = 0.5;
+}
+
 for (var i = 0; i < data.length; i++) {
     var path = new Path();
     path.strokeColor = 'black';
@@ -214,14 +225,6 @@ for (var i = 0; i < data.length; i++) {
     for (var j = 0; j < data[i].rankings.length; j++) {
         path.add(new Point(50+40*j, 50+(2*data[i].rankings[j])))
     }
-    path.onMouseEnter = function() {
-        this.strokeColor = 'red';
-        this.opacity = 1;
-        this.strokeWidth = 2;
-    }
-    path.onMouseLeave = function() {
-        this.strokeColor = 'black';
-        this.opacity = 0.25;
-        this.strokeWidth = 0.5;
-    }
+    path.onMouseEnter = enter;
+    path.onMouseLeave = leave;
 }
