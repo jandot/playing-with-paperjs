@@ -6,9 +6,10 @@ var data = [
 // The barchart
 function enter(event) {
     this.strokeColor = 'yellow';
-    var name = this.name; // Can't use "this" in filter definition below.
-    var otherItem = project.activeLayer.children.filter(function(x) { return x.name == "point_" + name})[0];
-    otherItem.fillColor = 'yellow';
+    var baseName = this.name.replace(/^.*_/,''); // Can't use "this" in filter definition below.
+    console.log(this.name + " => " + baseName);
+//    var otherItem = project.activeLayer.children.filter(function(x) { return x.name == "point_" + baseName})[0];
+//    otherItem.fillColor = 'yellow';
 
 //  Or using the longer approach:
 //    for (var i = 0; i < project.activeLayer.children.length; i++) {
@@ -20,9 +21,10 @@ function enter(event) {
 }
 function leave(event) {
     this.strokeColor = this.data.strokeColor;
-    var name = this.name; // Can't use "this" in filter definition below.
-    var otherItem = project.activeLayer.children.filter(function(x) { return x.name == "point_" + name})[0];
-    otherItem.fillColor = this.data.strokeColor;
+    var baseName = this.name.replace(/^.*_/,''); // Can't use "this" in filter definition below.
+    console.log(this.name + " => " + baseName);
+//    var otherItem = project.activeLayer.children.filter(function(x) { return x.name == "point_" + baseName})[0];
+//    otherItem.fillColor = this.data.strokeColor;
 
 //  Or using the longer approach:
 //    for (var i = 0; i < project.activeLayer.children.length; i++) {
@@ -34,7 +36,7 @@ function leave(event) {
 }
 for (var i = 0; i < data.length; i++ ) {
     var bar = new Path();
-    bar.name = data[i].name;
+    bar.name = "bar_" + data[i].name;
     bar.add(new Point(50+i*30,500));
     bar.add(new Point(50+i*30, 500-data[i].y));
     bar.strokeWidth = 20;
@@ -59,5 +61,7 @@ for (var i = 0; i < data.length; i++ ) {
     var point = new Path.Circle(new Point(200+data[i].x, 250-data[i].y),10);
     point.name = "point_" + data[i].name;
     point.fillColor = data[i].color;
-    
+    point.onMouseEnter = enter;
+    point.onMouseLeave = leave;
+
 }
