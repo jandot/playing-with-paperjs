@@ -1,7 +1,9 @@
 // QuadTree example, see http://bl.ocks.org/mbostock/4343214 and Wikipedia
-var nrObjects = 100;
-var maxLevel = 5;
-var maxObjects = 1;
+// Script generates points, and splits box based on these points
+// Cells are _not_ hierarchical (which would be good if used for selection)
+var nrObjects = 1000;
+var maxLevel = 8;
+var maxObjects = 2;
 var objects = new Array;
 
 //// Draw cicles ////
@@ -11,6 +13,7 @@ mainBox.strokeColor = 'black';
 for (var i = 0; i < nrObjects; i++) {
   var circle = new Path.Circle(new Point(Math.round(Math.random()*400), Math.round(Math.random()*400)), 2)
   circle.fillColor = 'red';
+  circle.opacity = 0.3;
   circle.data.centerX = circle.bounds.x + circle.bounds.width/2;
   circle.data.centerY = circle.bounds.y + circle.bounds.height/2;
   objects.push(circle);
@@ -72,8 +75,8 @@ Cell.prototype.draw = function() {
     width: this.width,
     height: this.height
   })
-  rectangle.fillColor = new Color(Math.random(), Math.random(), Math.random());
-  rectangle.opacity = 0.2;
+  rectangle.strokeColor = 'blue';
+  rectangle.strokeWidth = 0.4;
   rectangle.sendToBack();
 }
 
