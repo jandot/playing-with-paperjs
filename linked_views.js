@@ -5,45 +5,47 @@ var data = [
 
 // The barchart
 function enter(event) {
-  this.strokeColor = 'yellow';
-  var baseName = this.name.replace(/^.*_/,''); // Can't use "this" in filter definition below.
-  console.log(this.name + " => " + baseName);
-  var otherItem = project.activeLayer.children.filter(function(x) { return x.name == "point_" + baseName})[0];
-  otherItem.fillColor = 'yellow';
-
-//  Or using the longer approach:
-//    for (var i = 0; i < project.activeLayer.children.length; i++) {
-//        if ( project.activeLayer.children[i].name == "point_" + this.name) {
-//            project.activeLayer.children[i].fillColor = 'yellow';
-//            break;
-//        }
-//    }
+  var allItemsWithId = [this];
+  for ( var i = 0; i < project.activeLayer.children.length; i++ ) {
+    if ( project.activeLayer.children[i].data.itemId == this.data.itemId ) {
+      allItemsWithId.push(project.activeLayer.children[i]);
+    }
+  }
+  for (var i = 0; i < allItemsWithId.length; i++ ) {
+    allItemsWithId[i].fillColor = 'yellow';
+    allItemsWithId[i].strokeColor = 'yellow';
+  }
 }
+
 function leave(event) {
-  this.strokeColor = this.data.strokeColor;
-  var baseName = this.name.replace(/^.*_/,''); // Can't use "this" in filter definition below.
-  console.log(this.name + " => " + baseName);
-//    var otherItem = project.activeLayer.children.filter(function(x) { return x.name == "point_" + baseName})[0];
-//    otherItem.fillColor = this.data.strokeColor;
+  var allItemsWithId = [this];
+  for ( var i = 0; i < project.activeLayer.children.length; i++ ) {
+    if ( project.activeLayer.children[i].data.itemId == this.data.itemId ) {
+      allItemsWithId.push(project.activeLayer.children[i]);
+    }
+  }
 
-//  Or using the longer approach:
-//    for (var i = 0; i < project.activeLayer.children.length; i++) {
-//        if ( project.activeLayer.children[i].name == "point_" + this.name) {
-//            project.activeLayer.children[i].fillColor = this.data.strokeColor;
-//            break;
-//        }
-//    }
+  for (var i = 0; i < allItemsWithId.length; i++ ) {
+    allItemsWithId[i].fillColor = this.data.color;
+    allItemsWithId[i].strokeColor = this.data.color;
+  }
+
 }
+
 for (var i = 0; i < data.length; i++ ) {
   var bar = new Path();
   bar.name = "bar_" + data[i].name;
-  bar.add(new Point(50+i*30,500));
-  bar.add(new Point(50+i*30, 500-data[i].y));
+  bar.add(new Point(50+i*30,250));
+  bar.add(new Point(50+i*30, 250-data[i].y));
   bar.strokeWidth = 20;
-  bar.strokeColor = data[i].color;
-  bar.data.strokeColor = bar.strokeColor; // item.data can contain arbitrary data, necessary for use in enter() and leave()
   bar.onMouseEnter = enter;
   bar.onMouseLeave = leave;
+
+  bar.data.itemId = data[i].name; // We'll use this to match different marks for the same item
+
+  bar.strokeColor = data[i].color;
+  bar.fillColor = data[i].color;
+  bar.data.color = data[i].color; // item.data can contain arbitrary data, necessary for use in enter() and leave()
 }
 
 // The scatterplot
@@ -60,7 +62,12 @@ yAxis.strokeColor = 'black';
 for (var i = 0; i < data.length; i++ ) {
   var point = new Path.Circle(new Point(200+data[i].x, 250-data[i].y),10);
   point.name = "point_" + data[i].name;
-  point.fillColor = data[i].color;
   point.onMouseEnter = enter;
   point.onMouseLeave = leave;
+
+  point.data.itemId = data[i].name; // We'll use this to match different marks for the same item
+
+  point.strokeColor = data[i].color;
+  point.fillColor = data[i].color;
+  point.data.color = data[i].color; // item.data can contain arbitrary data, necessary for use in enter() and leave()
 }
