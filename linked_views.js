@@ -1,7 +1,7 @@
 var data = [
-  {name: "A", x: 40, y: 150, color: "red"},
-  {name: "B", x: 270, y: 140, color: "green"},
-  {name: "C", x: 140, y: 190, color: "blue"}]
+  {name: "A", x: 40, y: 150, color: "#e41a1c"},
+  {name: "B", x: 270, y: 140, color: "#377eb8"},
+  {name: "C", x: 140, y: 190, color: "#4daf4a"}]
 
 // The barchart
 function enter(event) {
@@ -12,8 +12,8 @@ function enter(event) {
     }
   }
   for (var i = 0; i < allItemsWithId.length; i++ ) {
-    allItemsWithId[i].fillColor = 'yellow';
-    allItemsWithId[i].strokeColor = 'yellow';
+    allItemsWithId[i].fillColor = '#984ea3';
+    allItemsWithId[i].strokeColor = '#984ea3';
   }
 }
 
