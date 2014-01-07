@@ -26,20 +26,22 @@ var polar2cartesian = function(r,deg) {
 
 // Let's start
 var data = [
-  {from:40,to:243},
+  {from:40,to:150},
   {from:90,to:287},
-  {from:122,to:150},
+  {from:122,to:243},
   {from:350,to:10}]
 var radius = 100;
 var offset = new Point(200,200);
 
-var calculateHandleX = function(x) {
-  return (x-200)/2;
+var calculateHandle = function(point) {
+  var x = point.x;
+  var absoluteX = (x+200)/2;
+  var relativeX = absoluteX - x;
+  var y = point.y;
+  var absoluteY = (y+200)/2;
+  var relativeY = absoluteY - y;
+  return [relativeX, relativeY]
 }
-var calculateHandleY = function(y) {
-  return (y-200)/2;
-}
-
 
 var circle = new Path.Circle(offset, radius);
 circle.strokeColor = 'grey';
@@ -57,15 +59,15 @@ for (var i = 0; i < data.length; i++ ) {
 
   var firstSegment = new Segment({
     point: pointCoordinatesFrom,
-    handleOut: [calculateHandleX(pointCoordinatesFrom.x),calculateHandleY(pointCoordinatesFrom.y)]
+    handleOut: calculateHandle(pointCoordinatesFrom)
   });
   var secondSegment = new Segment({
     point: pointCoordinatesTo,
-    handleIn: [-80,-100]
+    handleIn: calculateHandle(pointCoordinatesTo)
   })
   var bezier = new Path({
     segments: [firstSegment, secondSegment],
-    strokeColor: 'grey'
+    strokeColor: 'lightgrey'
   })
 }
 
