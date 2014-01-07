@@ -34,13 +34,7 @@ var radius = 100;
 var offset = new Point(200,200);
 
 var calculateHandle = function(point) {
-  var x = point.x;
-  var absoluteX = (x+200)/2;
-  var relativeX = absoluteX - x;
-  var y = point.y;
-  var absoluteY = (y+200)/2;
-  var relativeY = absoluteY - y;
-  return [relativeX, relativeY]
+  return -((point + offset)/2 - offset)
 }
 
 var circle = new Path.Circle(offset, radius);
@@ -53,7 +47,6 @@ for (var i = 0; i < data.length; i++ ) {
 
   var pointCoordinatesTo = new Point(polar2cartesian(radius,data[i].to));
   pointCoordinatesTo += offset;
-  console.log(pointCoordinatesTo);
   var pointTo = new Path.Circle(pointCoordinatesTo, 5);
   pointTo.fillColor = 'blue';
 
