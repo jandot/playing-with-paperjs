@@ -1,29 +1,73 @@
-var verticalOffset = 700;
+var verticalOffset = 500;
 var horizontalOffset = 50;
 var levelScaling = 5; // number of pixels per unit. If = 5: value of 3 => 15 pixels
 var levelHeight = 10*levelScaling;
 var data = [13,123,3617,627,2938172,3,509,8261,19,29128,1,28];
 
-var calculateComponents = function(x) {
+///////// Definition of DataPoint class ////////
+function DataPoint(val) {
+	this.val = val;
+	this.calculateComponents();
+}
+DataPoint.prototype.calculateComponents = function() {
 	var maxPowerOfTen = 0; // 4->0; 15->1; 18272->4
-	var currentX = x;
-	while ( currentX >= 10 ) {
+	var currentVal = this.val;
+	while ( currentVal >= 10 ) {
 		maxPowerOfTen += 1;
-		currentX /= 10;
+		currentVal /= 10;
 	}
-	var valueAtMaxPowerOfTen = x/Math.pow(10,maxPowerOfTen);
-	return {orig: x,
-			val: valueAtMaxPowerOfTen,
-			lvl: maxPowerOfTen};
+	var valueAtMaxPowerOfTen = this.val/Math.pow(10,maxPowerOfTen);
+	this.componentVal = valueAtMaxPowerOfTen;
+	this.lvl = maxPowerOfTen;
+}
+var enterGroup = function(event) {
+	this.strokeColor = 'red';
+}
+var leaveGroup = function(event) {
+	this.strokeColor = 'black';
+}
+DataPoint.prototype.draw = function() {
+	var group = new Group();
+	// The thin bar in the orders of magnitude smaller than the current number
+	var thinBar = new Path();
+	thinBar.add(new Point(horizontalOffset + i*20, verticalOffset));
+	thinBar.add(new Point(horizontalOffset + i*20, verticalOffset-levelHeight*dataPoints[i].lvl));
+	thinBar.strokeWidth = 2;
+	group.addChild(thinBar);
 
+	// The thick bar in the order of magnitude of the current number
+	var thickBar = new Path();
+	thickBar.add(new Point(horizontalOffset + i*20, verticalOffset-levelHeight*dataPoints[i].lvl));
+	thickBar.add(new Point(horizontalOffset + i*20, verticalOffset-levelHeight*dataPoints[i].lvl-(dataPoints[i].componentVal*levelScaling)));
+	thickBar.strokeWidth = 10;
+	group.addChild(thickBar);
+
+	// The thick but flat bar in the orders of magnitude larger than the current number
+	for (var j = dataPoints[i].lvl+1; j<=maxLevel; j++) {
+		var placeHolder = new Path();
+		placeHolder.add(new Point(horizontalOffset + i*20, verticalOffset-levelHeight*j));
+		placeHolder.add(new Point(horizontalOffset + i*20, verticalOffset-levelHeight*j-1));
+		placeHolder.strokeWidth = 10;
+		group.addChild(placeHolder);
+	}
+	console.log(group);
+	group.strokeColor = 'black';
+	group.onMouseEnter = enterGroup;
+	group.onMouseLeave = leaveGroup;
+}
+////////////////////
+
+var maxLevel = 0;
+var dataPoints = [];
+for ( var i = 0; i < data.length; i++ ) {
+	var dataPoint = new DataPoint(data[i]);
+	if ( maxLevel < dataPoint.lvl) {
+		maxLevel = dataPoint.lvl;
+	}
+	dataPoints.push(dataPoint);
 }
 
-var dataInComponents = [];
-for (var i = 0; i < data.length; i++ ) {
-	dataInComponents.push(calculateComponents(data[i]));
-}
-var maxLevel = Math.max.apply(Math,dataInComponents.map(function(o){return o.lvl;}))
-
+// Draw guides
 for (var i = 0; i <= maxLevel; i++) {
 	var yPos = verticalOffset-levelHeight*i;
 	var line = new Path();
@@ -44,27 +88,7 @@ for (var i = 0; i <= maxLevel; i++) {
 	}
 }
 
-for (var i = 0; i < dataInComponents.length; i++ ) {
-	// The thin bar in the orders of magnitude smaller than the current number
-	var thinBar = new Path();
-	thinBar.add(new Point(horizontalOffset + i*20, verticalOffset));
-	thinBar.add(new Point(horizontalOffset + i*20, verticalOffset-levelHeight*dataInComponents[i].lvl));
-	thinBar.strokeColor = 'black';
-	thinBar.strokeWidth = 2;
-
-	// The thick bar in the order of magnitude of the current number
-	var thickBar = new Path();
-	thickBar.add(new Point(horizontalOffset + i*20, verticalOffset-levelHeight*dataInComponents[i].lvl));
-	thickBar.add(new Point(horizontalOffset + i*20, verticalOffset-levelHeight*dataInComponents[i].lvl-(dataInComponents[i].val*levelScaling)));
-	thickBar.strokeColor = 'black';
-	thickBar.strokeWidth = 10;
-
-	// The thick but flat bar in the orders of magnitude larger than the current number
-	for (var j = dataInComponents[i].lvl+1; j<=maxLevel; j++) {
-		var placeHolder = new Path();
-		placeHolder.add(new Point(horizontalOffset + i*20, verticalOffset-levelHeight*j));
-		placeHolder.add(new Point(horizontalOffset + i*20, verticalOffset-levelHeight*j-1));
-		placeHolder.strokeColor = 'black';
-		placeHolder.strokeWidth = 10;
-	}
+// Draw the actual data
+for (var i = 0; i < dataPoints.length; i++ ) {
+	dataPoints[i].draw();
 }
