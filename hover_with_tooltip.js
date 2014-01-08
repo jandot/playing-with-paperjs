@@ -217,6 +217,28 @@ var tooltip = new PointText(new Point(25, 25));
 tooltip.fillColor = 'black';
 tooltip.fontSize = 14;
 
+var enter = function(event) {
+  this.strokeColor = 'red';
+  this.opacity = 1;
+  this.strokeWidth = 2;
+        
+  tooltip.content = this.name;
+  tooltip.position = event.point + [50,20];
+  tooltipRectangle.bounds.width = tooltip.handleBounds.width + 4;
+  tooltipRectangle.bounds.height = tooltip.handleBounds.height + 4;
+  tooltipRectangle.position = tooltip.position;
+  tooltipRectangle.visible = true;
+  tooltipRectangle.bringToFront();
+  tooltip.visible = true;
+  tooltip.bringToFront();
+}
+var leave = function(event) {
+  this.strokeColor = 'black';
+  this.opacity = 0.25;
+  this.strokeWidth = 0.5;
+  tooltip.visible = false;
+  tooltipRectangle.visible = false;
+}
 for (var i = 0; i < data.length; i++) {
     var path = new Path();
     path.strokeColor = 'black';
@@ -226,26 +248,6 @@ for (var i = 0; i < data.length; i++) {
     for (var j = 0; j < data[i].rankings.length; j++) {
         path.add(new Point(50+40*j, 50+(2*data[i].rankings[j])))
     }
-    path.onMouseEnter = function(event) {
-        this.strokeColor = 'red';
-        this.opacity = 1;
-        this.strokeWidth = 2;
-        
-        tooltip.content = this.name;
-        tooltip.position = event.point + [50,20];
-        tooltipRectangle.bounds.width = tooltip.handleBounds.width + 4;
-        tooltipRectangle.bounds.height = tooltip.handleBounds.height + 4;
-        tooltipRectangle.position = tooltip.position;
-        tooltipRectangle.visible = true;
-        tooltipRectangle.bringToFront();
-        tooltip.visible = true;
-        tooltip.bringToFront();
-    }
-    path.onMouseLeave = function() {
-        this.strokeColor = 'black';
-        this.opacity = 0.25;
-        this.strokeWidth = 0.5;
-        tooltip.visible = false;
-        tooltipRectangle.visible = false;
-    }
+    path.onMouseEnter = enter;
+    path.onMouseLeave = leave;
 }
