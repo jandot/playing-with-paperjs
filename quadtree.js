@@ -1,17 +1,18 @@
 // QuadTree example, see http://bl.ocks.org/mbostock/4343214 and Wikipedia
 // Script generates points, and splits box based on these points
 // Cells are _not_ hierarchical (which would be good if used for selection)
-var nrObjects = 1000;
+var nrObjects = 2000;
 var maxLevel = 8;
 var maxObjects = 2;
 var objects = new Array;
+var size = 600;
 
 //// Draw cicles ////
-var mainBox = new Path.Rectangle([0,0],[400,400]);
+var mainBox = new Path.Rectangle([0,0],[size,size]);
 mainBox.strokeColor = 'black';
 
 for (var i = 0; i < nrObjects; i++) {
-  var circle = new Path.Circle(new Point(Math.round(Math.random()*400), Math.round(Math.random()*400)), 2)
+  var circle = new Path.Circle(new Point(Math.round(Math.random()*size), Math.round(Math.random()*size)), 2)
   circle.fillColor = 'red';
   circle.opacity = 0.3;
   circle.data.centerX = circle.bounds.x + circle.bounds.width/2;
@@ -84,7 +85,7 @@ Cell.prototype.draw = function() {
 var mousePositionText;
 function onMouseMove(event) {
   if ( mousePositionText ) { mousePositionText.remove() };
-  mousePositionText = new PointText(new Point(50,500));
+  mousePositionText = new PointText(new Point(50,size + 50));
   mousePositionText.fillColor = 'black';
   mousePositionText.fontSize = 14;
   mousePositionText.content = Math.round(event.point.x) + " . " + Math.round(event.point.y);
@@ -93,7 +94,7 @@ function onMouseMove(event) {
 
 //////
 
-var cell1 = new Cell(0,0,400,400,0,'');
+var cell1 = new Cell(0,0,size,size,0,'');
 cell1.objects = objects;
 cell1.split();
 for ( var i = 0; i < finalCells.length; i++ ) {
