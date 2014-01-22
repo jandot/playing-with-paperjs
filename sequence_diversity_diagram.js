@@ -1,3 +1,4 @@
+var scalingFactor = 75
 var dagNodes = [{id:"A", x:1, y:2, val:'valine', weight:5}, // Have to remove y and calculate from categories.
 	        	{id:"B", x:2, y:3, val:'leucine', weight:4},
 	        	{id:"C", x:2, y:5, val:'proline', weight:1},
@@ -22,7 +23,7 @@ var dagLinks = [{from:"A", to:"B", weight:4},
 
 // Draw all nodes
 for ( var i = 0; i < dagNodes.length; i++ ) {
-	var path = new Path.Rectangle(new Rectangle(dagNodes[i].x*50, dagNodes[i].y*50, 20, dagNodes[i].weight));
+	var path = new Path.Rectangle(new Rectangle(dagNodes[i].x*scalingFactor, dagNodes[i].y*scalingFactor, 20, dagNodes[i].weight));
 	path.fillColor = 'blue';
 }
 
@@ -35,8 +36,8 @@ for ( var i = 0; i < dagLinks.length; i++ ) {
 	var toX = dagNodes.filter(function(x) {return x.id == toNode})[0].x;
 	var toY = dagNodes.filter(function(x) {return x.id == toNode})[0].y;
 	var path = new Path();
-	path.add(new Point(fromX*50 + 20, fromY*50));
-	path.add(new Point(toX*50, toY*50));
+	path.add(new Point(fromX*scalingFactor + 20, fromY*scalingFactor));
+	path.add(new Point(toX*scalingFactor, toY*scalingFactor));
 	path.strokeWeight = dagLinks[i].weight;
 	path.strokeColor = 'blue';
 }
