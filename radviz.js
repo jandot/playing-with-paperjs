@@ -5,27 +5,6 @@
 // (xA - xp) * 17 + (xB - xp) * 50 + (xC - xp) * 33 = 0
 // => xp = 38.3
 
-function AttractorSpace(attractors) {
-	this.attractors = attractors
-	this.draw = function() {
-		this.attractors.map(function(a) {a.draw()})
-	}
-    this.distanceBetweenAttractors = function() {
-    	return(Math.sqrt(Math.pow(this.attractors[0].x - this.attractors[1].x,2) +
-    					 Math.pow(this.attractors[0].y - this.attractors[1].y,2)))
-    }
-    this.sortAttractorsX = function() {
-    	return this.attractors.sort(function(a,b) {return (a.x-b.x)})
-    }
-    this.sortAttractorsY = function() {
-    	return this.attractors.sort(function(a,b) {return (a.y-b.y)})
-    }
-    this.center = function() {
-    	var x = this.attractors.reduce(function(a,b) {return a.x+b.x})/2
-    	var y = this.attractors.reduce(function(a,b) {return a.y+b.y})/2
-    	return [x,y]
-    }
-}
 function Attractor(name, x, y) {
 	this.name = name
 	this.x = x
@@ -53,19 +32,24 @@ function DataPoint(attractions) {
 	this.draw = function() {
 		var a = new Path.Circle(this.coordinates, 5)
 		a.fillColor = 'red'
-		a.opacity = 0.2
+		a.opacity = 0.1
 	}
+    this.toString = function() {
+        return this.attractions.map(function(a) {return a.attractor.name + " " + a.force.toFixed(2)}).join(" ; ")
+    }
 }
 
 attractorA = new Attractor('A',50,50)
 attractorB = new Attractor('B',550,50)
-attractorC = new Attractor('C',300,300)
-var attractorSpace = new AttractorSpace([attractorA,attractorB,attractorC])
-attractorSpace.draw()
-var points = new Array
-for ( var i = 0; i < 1000; i++ ) {
+attractorC = new Attractor('C',50,550)
+attractorD = new Attractor('D',550,550)
+var attractors = [attractorA,attractorB,attractorC,attractorD]
+attractors.map(function(a) {a.draw()})
+for ( var i = 0; i < 10000; i++ ) {
     var p = new DataPoint([{attractor:attractorA,force:Math.random()},
                             {attractor:attractorB,force:Math.random()},
-                            {attractor:attractorC,force:Math.random()}])
+                            {attractor:attractorC,force:Math.random()},
+                            {attractor:attractorD,force:Math.random()}])
     p.draw()
+    // console.log(p.toString())
 }
