@@ -16,8 +16,7 @@ function Attractor(name, x, y) {
 }
 
 function DataPoint(attractions) {
-	this.attractions = attractions
-    this.forces = this.attractions.map(function(a) {return a.force})
+	this.attractions = attractions 
     this.totalAttractorForce = function() {
      return this.attractions.map(function(a) {return a.force}).reduce(function(a,b) {return a+b})
     }
@@ -33,10 +32,19 @@ function DataPoint(attractions) {
 		var a = new Path.Circle(this.coordinates, 5)
 		a.fillColor = 'red'
 		a.opacity = 0.1
+        a.onMouseEnter = enter
+        a.onMouseLeave = leave
 	}
     this.toString = function() {
-        return this.attractions.map(function(a) {return a.attractor.name + " " + a.force.toFixed(2)}).join(" ; ")
+        return ("x:" + this.coordinateX().toFixed(2) + " y:" + this.coordinateY().toFixed(2) + " " + this.attractions.map(function(a) {return a.attractor.name + " " + a.force.toFixed(2)}).join(" ; "))
     }
+}
+
+var enter = function(event) {
+  this.opacity = 1;
+}
+var leave = function(event) {
+  this.opacity = 0.1;
 }
 
 attractorA = new Attractor('A',50,50)
@@ -45,7 +53,7 @@ attractorC = new Attractor('C',50,550)
 attractorD = new Attractor('D',550,550)
 var attractors = [attractorA,attractorB,attractorC,attractorD]
 attractors.map(function(a) {a.draw()})
-for ( var i = 0; i < 10000; i++ ) {
+for ( var i = 0; i < 1000; i++ ) {
     var p = new DataPoint([{attractor:attractorA,force:Math.random()},
                             {attractor:attractorB,force:Math.random()},
                             {attractor:attractorC,force:Math.random()},
