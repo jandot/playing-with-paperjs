@@ -7,7 +7,7 @@ var data = [13,123,3617,627,2938172,3,509,8261,19,29128,1,28];
 ///////// Definition of DataPoint class ////////
 function DataPoint(val) {
 	this.val = val;
-	this.calculateComponents();
+	this.calculateComponents(); // Sets this.componentVal and this.lvl
 }
 DataPoint.prototype.calculateComponents = function() {
 	var maxPowerOfTen = 0; // 4->0; 15->1; 18272->4
@@ -17,7 +17,7 @@ DataPoint.prototype.calculateComponents = function() {
 		currentVal /= 10;
 	}
 	var valueAtMaxPowerOfTen = this.val/Math.pow(10,maxPowerOfTen);
-	this.componentVal = valueAtMaxPowerOfTen;
+	this.componentVal = valueAtMaxPowerOfTen; // 523 -> 5.23, 81927 -> 8.1927
 	this.lvl = maxPowerOfTen;
 }
 var enterGroup = function(event) {
@@ -50,7 +50,6 @@ DataPoint.prototype.draw = function() {
 		placeHolder.strokeWidth = 10;
 		group.addChild(placeHolder);
 	}
-	console.log(group);
 	group.strokeColor = 'black';
 	group.onMouseEnter = enterGroup;
 	group.onMouseLeave = leaveGroup;
