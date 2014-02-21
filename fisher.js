@@ -158,6 +158,10 @@ function Attractor(name, x, y) {
 	this.draw = function() {
     	var a = new Path.Circle(new Point(this.x, this.y),5);
     	a.fillColor = 'grey'
+        var t = new PointText(new Point(this.x, this.y-10))
+        t.justification = 'center'
+        t.fillColor = 'black'
+        t.content = this.name
     }
 }
 
@@ -181,11 +185,13 @@ function DataPoint(attractions) {
 	}
 }
 
-attractorSepalLength = new Attractor('sepal length',50,50)
-attractorSepalWidth = new Attractor('sepal width',550,50)
-attractorPetalLength = new Attractor('petal length',50,550)
-attractorPetalWidth = new Attractor('petal width',550,550)
+attractorSepalLength = new Attractor('sepal length',150,150)
+attractorSepalWidth = new Attractor('sepal width',450,150)
+attractorPetalLength = new Attractor('petal length',150,450)
+attractorPetalWidth = new Attractor('petal width',450,450)
 var attractors = [attractorSepalLength,attractorSepalWidth,attractorPetalLength,attractorPetalWidth]
+var c = new Path.Circle(new Point(300,300),212.13)
+c.strokeColor = 'grey'
 attractors.map(function(a) {a.draw()})
 for ( var i = 0; i < irisData.length; i++ ) {
     var p = new DataPoint([{attractor:attractorSepalLength,force:irisData[i].sepalLength},
@@ -195,3 +201,21 @@ for ( var i = 0; i < irisData.length; i++ ) {
     p.fillColor = irisData[i].color
     p.draw()
 }
+var b1 = new Path.Rectangle(new Rectangle(new Point(550,200),10))
+b1.fillColor = '#66c2a5'
+var t1 = new PointText(new Point(570,210))
+t1.justification = 'left'
+t1.fillColor = 'black'
+t1.content = 'I.setosa'
+var b2 = new Path.Rectangle(new Rectangle(new Point(550,230),10))
+b2.fillColor = '#fc8d62'
+var t2 = new PointText(new Point(570,240))
+t2.justification = 'left'
+t2.fillColor = 'black'
+t2.content = 'I.versicolor'
+var b3 = new Path.Rectangle(new Rectangle(new Point(550,260),10))
+b3.fillColor = '#8da0cb'
+var t3 = new PointText(new Point(570,270))
+t3.justification = 'left'
+t3.fillColor = 'black'
+t3.content = 'I.virginica'
