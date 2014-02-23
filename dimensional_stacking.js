@@ -15,14 +15,13 @@ function DataPoint(data) {
                 direction = 'x'
             }
         }
-        xPos *= 500
-        yPos *= 500
         return [xPos,yPos]
     }
     
-    this.draw = function() {
-        var x = this.normalizedCoordinates()[0]
-        var y = this.normalizedCoordinates()[1]
+    this.draw = function(scaling) {
+    	console.log(scaling)
+        var x = this.normalizedCoordinates()[0]*scaling
+        var y = this.normalizedCoordinates()[1]*scaling
         var point = new Path.Circle(new Point(x,y), 3)
         point.fillColor = 'red'
     }
@@ -34,14 +33,20 @@ function DimensionalScalingPlot(data) {
     this.dataCoordinates = []
     
 	this.config = {
-		xRange: 800,
-		yRange: 800,
-		numberOfBins: 5
+		scaling: 500
+	}
+
+	this.drawGuides = function() {
+		
+	}
+
+	this.drawDataPoints = function(scaling) {
+		this.dataPoints.map(function(x) {x.draw(scaling)})
 	}
 
 	this.draw = function() {
-	    this.dataPoints.map(function(x) {x.draw()})
-
+		this.drawGuides(this.config.scaling)
+		this.drawDataPoints(this.config.scaling)
 	}
 }
 
@@ -57,7 +62,9 @@ var data = [
 	[0.2,1,0.6,0.2,0.6,0.8,1,0.2,0.8,0.8,1,1,0.6,0,0.4,0.2,0.6,0.6,0.8,0.4],
 	[0.2,0.6,0.4,1,0.2,0.6,0.6,0,0.6,1,0.6,0.2,0.4,0.4,0.2,0.8,0.6,0.6,0.6,0.2],
 	[0.4,1,0.6,0.4,0.8,0.4,0.2,0.8,1,0.2,0.4,0.2,0.4,0.4,1,0.4,0.2,0.6,0.2,0.4],
-	[0.4,0.4,0.4,0,0.8,0.6,0.6,0.8,0.8,0.2,0.2,0.4,0.2,0.6,0.2,0.8,0.2,0.6,1,0.6]
+	[0.4,0.4,0.4,0,0.8,0.6,0.6,0.8,0.8,0.2,0.2,0.4,0.2,0.6,0.2,0.8,0.2,0.6,1,0.6],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 ]
 
 var dsp = new DimensionalScalingPlot(data)
