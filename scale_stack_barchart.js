@@ -78,10 +78,10 @@ function ScaleStackBarchart(data) {
 		for (var i = 0; i <= this.maxLevel; i++) {
 			var yPos = this.config.verticalOffset-this.config.levelHeight*i;
 			var line = new Path();
-			line.add(new Point(20,yPos));
-			line.add(new Point(20+data.length*25,yPos));
+			line.add(new Point(this.config.horizontalOffset - 30,yPos));
+			line.add(new Point(this.config.horizontalOffset - 30+data.length*25,yPos));
 			line.strokeColor = 'grey';
-			var label = new PointText(new Point(20+data.length*25,yPos));
+			var label = new PointText(new Point(this.config.horizontalOffset - 30+data.length*25,yPos));
 			label.fillColor = 'grey';
 			label.fontSize = 14;
 			label.content = 1*Math.pow(10,i);
@@ -89,8 +89,8 @@ function ScaleStackBarchart(data) {
 			// Add the smaller lines
 			for (var j = 1; j < 10; j++) {
 				var smallLine = new Path();
-				smallLine.add(new Point(20,yPos - (this.config.levelHeight/10)*j));
-				smallLine.add(new Point(20+data.length*25,yPos - (this.config.levelHeight/10)*j));
+				smallLine.add(new Point(this.config.horizontalOffset - 30,yPos - (this.config.levelHeight/10)*j));
+				smallLine.add(new Point(this.config.horizontalOffset - 30+data.length*25,yPos - (this.config.levelHeight/10)*j));
 				smallLine.strokeColor = 'lightgrey';
 			}
 		}
