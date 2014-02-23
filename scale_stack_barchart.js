@@ -1,5 +1,3 @@
-var data = [13,123,3617,627,2938172,3,509,8261,19,29128,1,28];
-
 ///////// Definition of DataPoint class ////////
 function DataPoint(val) {
 	this.val = val;
@@ -109,5 +107,6 @@ function ScaleStackBarchart(data) {
 	}
 }
 
+var data = [13,123,3617,627,2938172,3,509,8261,19,29128,1,28];
 var ssbc = new ScaleStackBarchart(data)
 ssbc.draw()
