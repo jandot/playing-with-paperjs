@@ -61,7 +61,6 @@ function ScaleStackBarchart(data) {
 		horizontalOffset: 50,
 		levelScaling: 5, // number of pixels per unit. If = 5: value of 3 => 15 pixels
 	}
-	this.config.levelHeight = 10*this.config.levelScaling
 
 	this.maxLevel = 0;
 	this.dataPoints = [];
@@ -104,6 +103,7 @@ function ScaleStackBarchart(data) {
 	}
 
 	this.draw = function() {
+		this.config.levelHeight = 10*this.config.levelScaling
 		this.drawGuides()
 		this.drawDataPoints()
 	}
