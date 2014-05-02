@@ -1,85 +1,119 @@
-var scalingFactorX = 50
-var scalingFactorY = 20
+// var alignment = [
+// 	'-------MSKLIEYDETARRAMEVGMDKLADTVRVTLGPRGRHVVLAKAFGGPTVTNDGVTVAREIELEDPFEDLGAQLVKSVATKTNDVAGDGTTTATILAQALIKGGLRLVAAGVNPIALGVGIGKAADAVSEALLASATPVSGKTGIAQVATVSSR-DEQIGDLVGEAMSKVGHDGVVSVEESSTLGTELEFTEGIGFDKGFLSAYFVTDFDNQQAVLEDALILLHQDKISSLPDLLPLLEKVAGTGKPLLIVAEDVEGEALATLVVNAIRKTLKAVAVKGPYFGDRRKAFLEDLAVVTGGQVVNPDAGMVLREVGLEVLGSARRVVVSKDDTVIVDGGGTAEAVANRAKHLRAEIDKSDSDWDREKLGERLAKLAGGVAVIKVGAATETALKERKESVEDAVAAAKAAVEEGIVPGGGASLIHQAR-KALTELRASLTGDEVLGVDVFSEALAAPLFWIAANAGLDGSVVVNKVSELPAGHGLNVNTLSYGDLAADGVIDPVKVTRSAVLNASSVARMVLTTETVVVDK----PAK--AEDH-DHHHGH-----------AH--------------------',
+// 	'-------MSKLIEYDETARRAMEVGMDKLADTVRVTLGPRGRHVVLAKAFGGPTVTNDGVTAAREIELEDPFEDLGAQLVKSVATKTNDVAGDGTTTATILAQALIKGGLRLVAAGVNPIALGVGIGKAADAVSEALLASATPVSGKTGIAQVATVSSR-DEQIGDLVGEAMSKVGHDGVVSVEESSTLGTELEFTEGIGFDKGFLSAYFVTDFDNQQAVLEDALILLHQDKISSLPDLLPLLEKVAGTGKPLLIVAEDVEGEALATLVVNAIRKTLKAVAVKGPYFGDRRKAFLEDLAVVTGGQVVNPDAGMVLREVGLEVLGSARRVVVSKDDTVIVDGGGTAEAVANRAKHLRAEIDKSDSDWDREKLGERLAKLAGGVAVIKVGAATETALKERKESVEDAVAAAKAAVEEGIVPGGGASLIHQAR-KALTELRASLTGDEVLGVDVFSEALAAPLFWIAANAGLDGSVVVNKVSELPAGHGLNVNTLSYGDLAADGVIDPVKVTRSAVLNASSVARMVLTTETVVVDK----PAK--AEDH-DHHHGH-----------AH--------------------',
+// 	'-------MSKLIEYDETARRAMEVGMDKLADTVRVTLGPRGRHVVLAKAFGGPTVTNDGVTVAREIELEDPFEDLGAQLVKSVATKTNDVAGDGTTTATILAQALIKGGLRLVAAGVNPIALGVGIGKAADAVSEALLASATPVSGKTGIAQVATVSSR-DEQIGDLVGEAMSKVGHDGVVSVEESSTLGIELEFTEGIGFDKGFLSAYFVTDFDNQQAVLEDALILLHQDKISSLPDLLPLLEKVAGTGKPLLIVAEDVEGEALATLVVNAIRKTLKAVAVKGPYFGDRRKAFLEDLAVVTGGQVVNPDAGMVLREVGLEVLGSARRVVVSKDDTVIVDGGGTAEAVANRAKHLRAEIDKSDSDWDREKLGERLAKLAGGVAVIKVGAATETALKERKESVEDAVAAAKAAVEEGIVPGGGASLIHQAR-KALTELRASLTGDEVLGVDVFSEALAAPLFWIAANAGLDGSVVVNKVSELPAGHGLNVNTLSYGDLAADGVIDPVKVTRSAVLNASSVARMVLTTETVVVGR----QAG--QGRR-SRPSPR-----------ARGTELRSADAKAPDTPSVRGL',
+// 	'-------MSKLIEYDETARHAMEVGMNKLADTVRVTLGPRGRHVVLAKAFGGPTITNDGVTVAREIDLEDPFENLGAQLVKSVATKTNDVAGDGTTTATVLAQALVKGGLRMVAAGANPVALGAGISKAADAVSEALLAVATPVAGKDAITQVATVSSR-DEQIGALVGEGMNKVGTDGVVSVEESSTLDTELEFTEGVGFDKGFLSAYFVTDFDSQQAVLDDPLVLLHQEKISSLPELLPMLEKVTESGKPLLIVAEDLEGEALATLVVNSIRKTLKAVAVKSPFFGDRRKAFLEDLAIVTGGQVVNPETGLVLREVGTDVLGSARRVVVSKDDTIIVDGGGSNDAVAKRVNQLRAEIEVSDSEWDREKLQERVAKLAGGVAVIKVGAVTETALKKRKESVEDAVAAAKASIEEGIIAGGGSALV-QCG-AALKQLRTSLTGDEALGIDVFFEALKAPLYWIATNAGLDGAVVVDKVSGLPAGHGLNASTLGYGDLVADGVVDPVKVTRSAVLNAASVARMMLTTETAVVDK----PAK--TEEH-DH-HGH-----------AH--------------------'
+// ]
 
-var dagNodes = [{id:"A", x:1, y:2, val:'valine', weight:5}, // Have to remove y and calculate from categories.
-	        	{id:"B", x:2, y:3, val:'leucine', weight:4},
-	        	{id:"C", x:2, y:5, val:'proline', weight:1},
-	        	{id:"D", x:3, y:3, val:'leucine', weight:1},
-	        	{id:"E", x:3, y:5, val:'proline', weight:3},
-	        	{id:"F", x:4, y:7, val:'threonine', weight:4},
-	        	{id:"G", x:5, y:4, val:'tyrosine', weight:4},
-	        	{id:"H", x:5, y:6, val:'isoleucine', weight:1},
-	        	{id:"I", x:6, y:1, val:'serine', weight:5},
-	        	{id:"J", x:4, y:3, val:'leucine', weight:1}]
-var dagLinks = [{from:"A", to:"B", weight:4},
-	        	{from:"A", to:"C", weight:1},
-	        	{from:"B", to:"E", weight:4},
-	        	{from:"C", to:"D", weight:1},
-	        	{from:"D", to:"F", weight:1},
-	        	{from:"E", to:"J", weight:1},
-	        	{from:"E", to:"F", weight:3},
-	        	{from:"F", to:"G", weight:3},
-	        	{from:"F", to:"H", weight:1},
-	        	{from:"G", to:"I", weight:4},
-	        	{from:"H", to:"I", weight:1}]
+// What's the datastructure that I need?
+// dagPaths
+// [{id: 1, nodes:['-','-','M','S','K',...]}, ...]
+// dagNodes: need weight: just count number of occurences for that position
+// dagLinks: need weight: count how many times link occurs
 
-var dagPaths = [{id:1, nodes:["A","B","E","F","G","I"]},
-                {id:2, nodes:["A","C","E","F","H","I"]},
-                {id:3, nodes:["A","B","E","J"]},
-                {id:4, nodes:["A","C","D","F","G","I"]}]
+var xSizeWindow = 1000
+var xSizeNode = 10
+var xSizeLink = 15
+var yScaling = 5
 
+var dagPaths = new Array
 
-function enter(event) {
-	for ( var i = 0; i < groups.length; i++ ) {
-		var groupActive = false
-		for ( var j = 0; j < groups[i].children.length; j++ ) {
-			if ( groups[i].children[j].data.name == this.data.name ) {
-				groupActive = true
-			}
-		}
-		if ( groupActive ) {
-			for ( var j = 0; j < groups[i].children.length; j++ ) {
-				groups[i].children[j].fillColor = 'red'
-				groups[i].children[j].strokeColor = 'red'
-			}
-		} else {
-			groups[i].sendToBack()
-		}
-	}
-}
-function leave(event) {
-    this.layer.children.map(function(d) { d.strokeColor = 'lightblue'})
-    this.layer.children.map(function(d) { d.fillColor = 'lightblue'})
+for ( var i = 0; i < alignment.length; i++ ) {
+    dagPaths.push({id:i, nodes:alignment[i].split('')})
 }
 
-var groups = new Array();
+var dagPathNodes = dagPaths.map(function(x) { return x.nodes })
+var transposedDagPaths = Object.keys(dagPathNodes[0]).map(function (c) {
+        return dagPathNodes.map(function (r) {
+            return r[c];
+        });
+    });
+
+// datastructure:
+// {0: {AG:3,AR:2}, 1:{V-:5}}
+var links = new Array
 for ( var i = 0; i < dagPaths.length; i++ ) {
-	var group = new Group();
-	for ( var j = 0; j < dagPaths[i].nodes.length; j++ ) {
-		var node = dagNodes.filter(function(x) {return x.id == dagPaths[i].nodes[j]})[0];
-		var rect = new Path.Rectangle(new Rectangle(node.x*scalingFactorX, node.y*scalingFactorY, 20, node.weight));
-		rect.data.name = node.id
-		rect.fillColor = 'lightblue';
-		rect.onMouseEnter = enter
-		rect.onMouseLeave = leave
-		group.addChild(rect);
-	}
-	for ( var j = 1; j < dagPaths[i].nodes.length; j++ ) {
-		var fromNode = dagPaths[i].nodes[j-1];
-		var toNode = dagPaths[i].nodes[j];
-		var fromX = dagNodes.filter(function(x) {return x.id == fromNode})[0].x;
-		var fromY = dagNodes.filter(function(x) {return x.id == fromNode})[0].y;
-		var toX = dagNodes.filter(function(x) {return x.id == toNode})[0].x;
-		var toY = dagNodes.filter(function(x) {return x.id == toNode})[0].y;
-		var line = new Path();
-		line.add(new Point(fromX*scalingFactorX + 20, fromY*scalingFactorY));
-		line.add(new Point(toX*scalingFactorX, toY*scalingFactorY));
-		line.data.name = fromNode + "->" + toNode
-		line.strokeWeight = 2;
-		line.strokeColor = 'lightblue';
-		line.onMouseEnter = enter
-		line.onMouseLeave = leave
-		group.addChild(line);
-  }
-  groups.push(group);
+    for ( var j = 0; j < dagPaths[i].nodes.length - 1; j++ ) {
+        var connection = dagPaths[i].nodes[j] + dagPaths[i].nodes[j+1]
+        if ( ! links.hasOwnProperty(j) ) {
+            links[j] = {}
+        }
+        if ( ! links[j].hasOwnProperty(connection) ) {
+            links[j][connection] = 0
+        }
+        links[j][connection] += 1
+    }
+}
+
+function countNodeOccurrences(array) {
+    return array.reduce(function(counts, currentValue, index, array) {
+        if ( currentValue in counts ) {
+            counts[currentValue] += 1
+        } else {
+            counts[currentValue] = 1
+        }
+        return counts
+    },{})
+}
+
+// console.log(JSON.stringify(dagPaths))
+//console.log(JSON.stringify(transposedDagPaths))
+var dagNodes = transposedDagPaths.map(function(x,i) { return {position:i, counts: countNodeOccurrences(x)}})
+// console.log(JSON.stringify(dagNodes))
+// console.log(JSON.stringify(links))
+
+var verticalOrder = {"A":1, "G":2, "I":3, "L":4, "V":5, "C":6, "M":7, "S":8, "T":9,
+                    "P":10, "F":11, "W":12, "Y":13, "H":14, "K":15, "R":16, "D":17,
+                    "E":18, "N":19, "Q":20, "-":21, "X":22}
+
+// Draw nodes
+var xOffset = 0
+var yOffset = 0
+for ( var i = 0; i < dagNodes.length; i++ ) {
+    var x = i*(xSizeNode+xSizeLink)
+    if ( ( x - xOffset ) > xSizeWindow ) {
+        xOffset += xSizeWindow + (xSizeNode + xSizeLink)
+        yOffset += 23*yScaling // 22 aminoacids
+    }
+    var keys = Object.keys(dagNodes[i].counts)
+    for ( var j = 0; j < keys.length; j++ ) {
+        var y = verticalOrder[keys[j]]*yScaling
+        var nodeLine = new Path()
+        nodeLine.add(new Point(x - xOffset, y + yOffset))
+        nodeLine.add(new Point(x - xOffset+xSizeNode,y + yOffset))
+        nodeLine.strokeWidth = dagNodes[i].counts[keys[j]]/450
+        // if ( nodeLine.strokeWidth == 4) {
+            nodeLine.strokeColor = 'blue'
+        // } else {
+        //     nodeLine.strokeColor = 'red'
+        // }
+    }
+}
+
+// Draw links
+xOffset = 0
+yOffset = 0
+for ( var i = 0; i < links.length; i++ ) {
+    var x = i*(xSizeNode + xSizeLink)
+    if ( (x - xOffset) > xSizeWindow ) {
+        xOffset += xSizeWindow + (xSizeNode + xSizeLink)
+        yOffset += 23*yScaling // 22 aminoacids
+    }
+    var distinctLinks = Object.keys(links[i])
+    for ( var j = 0; j < distinctLinks.length; j++ ) {
+        var from = distinctLinks[j][0]
+        var to = distinctLinks[j][1]
+        var yFrom = verticalOrder[from]*yScaling
+        var yTo = verticalOrder[to]*yScaling
+        
+        var point1 = new Point(x - xOffset + xSizeNode, yFrom + yOffset)
+        var handle1Out = new Point(xSizeNode/2, 0)
+        var handle2In = new Point(-xSizeNode/2, 0)
+        var point2 = new Point(x - xOffset + xSizeNode + xSizeLink, yTo + yOffset)
+        var linkLine = new Path()
+        linkLine.add(new Segment(point1, new Point(0,0), handle1Out))
+        linkLine.add(new Segment(point2, handle2In, new Point(0,0)))
+        linkLine.strokeWidth = links[i][distinctLinks[j]]/450
+        linkLine.strokeColor = 'lightgrey'
+    }
 }
