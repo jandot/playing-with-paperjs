@@ -1,6 +1,8 @@
+view.viewSize = new Size(1000,600)
+
 var objects = new Array;
-for (i = 0; i < 50; i++) {
-    var circle = new Path.Circle(new Point(Math.random()*500, Math.random()*500), Math.random()*20)
+for (i = 0; i < 500; i++) {
+    var circle = new Path.Circle(new Point(Math.random()*1000, Math.random()*600), Math.random()*20)
     circle.fillColor = 'lightgrey';
     circle.strokeColor = 'black';
     circle.opacity = 0.5;
@@ -18,7 +20,7 @@ function onMouseDrag(event) {
     if (selectionRectangle) { selectionRectangle.remove(); }
     selectionRectangle = new Path.Rectangle(mouseDownPosition, mouseDragPosition);
     selectionRectangle.strokeColor = 'grey';
-    
+
     // This is slow because has to go over all objects with every pixel dragged
     for (var i = 0; i < objects.length; i++ ) {
         if ( selectionRectangle.bounds.intersects(objects[i].bounds) ) {

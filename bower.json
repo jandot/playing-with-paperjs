@@ -1,0 +1,21 @@
+{
+  "name": "playing-with-paperjs",
+  "version": "0.0.0",
+  "homepage": "https://github.com/jandot/playing-with-paperjs",
+  "authors": [
+    "Jan Aerts <jan.aerts@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "papaparse": "~4.1.2",
+    "paper": "~0.9.24"
+  }
+}

@@ -198,6 +198,8 @@ var data = [
   {name:"VAN DEN BROECK Jurgen",rankings:[5,26,9,15,30,19,12]},
   {name:"SCHLECK Andy",rankings:[33,42,23,49,32,16,9,7,38,29,6,19,3,41,36,24,1,9,17,68]}]
 
+view.viewSize = new Size(800,800)
+
 for (var i = 0; i < 20; i++) {
     var path = new Path();
     path.add(new Point(50+40*i, 50));

@@ -13,6 +13,8 @@ Person.prototype.draw = function() {
     path.add(new Point(this.x+20, this.y+20));
 }
 
+view.viewSize = new Size(800,800)
+
 var person1 = new Person(50,150,"red");
 var person2 = new Person(75,200,"green");
 person1.draw();
